@@ -1,0 +1,5 @@
+[2025-10-30 16:26:19] 🚀 Iniciando ingesta automática cada 15 minutos...
+[2025-10-30 16:26:19] ✅ Ingesta completada: 47 registros → c:\Parklytics\data\raw\queue_times\queue_times_2025-10-30_16-26.csv
+[2025-10-30 16:41:20] ✅ Ingesta completada: 47 registros → c:\Parklytics\data\raw\queue_times\queue_times_2025-10-30_16-41.csv
+[2025-10-30 16:56:20] ✅ Ingesta completada: 47 registros → c:\Parklytics\data\raw\queue_times\queue_times_2025-10-30_16-56.csv
+[2025-10-30 17:11:20] ✅ Ingesta completada: 47 registros → c:\Parklytics\data\raw\queue_times\queue_times_2025-10-30_17-11.csv
