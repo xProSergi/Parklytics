@@ -1,8 +1,3 @@
-# ====================================================
-# PARK WAIT TIME PREDICTOR - INTERFAZ STREAMLIT
-# Sistema de predicción de tiempos de espera
-# ====================================================
-
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -24,18 +19,39 @@ st.set_page_config(
 # CSS personalizado para mejorar la interfaz
 st.markdown("""
     <style>
+    /* Estilos base */
+    :root {
+        --primary-color: #1f77b4;
+        --secondary-color: #667eea;
+        --text-color: #333;
+        --bg-color: #fff;
+        --card-bg: #f8f9fa;
+        --card-border: #e9ecef;
+    }
+    
+    /* Modo oscuro */
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --text-color: #f8f9fa;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --card-border: #333;
+        }
+    }
+    
     .main-header {
         font-size: 3rem;
         font-weight: bold;
-        color: #1f77b4;
+        color: var(--secondary-color);
         text-align: center;
         margin-bottom: 1rem;
     }
     .sub-header {
         font-size: 1.2rem;
-        color: #666;
+        color: var(--text-color);
         text-align: center;
         margin-bottom: 2rem;
+        opacity: 0.9;
     }
     .prediction-box {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -55,29 +71,35 @@ st.markdown("""
         font-size: 1.5rem;
         opacity: 0.9;
     }
-    .metric-box {
-        background: #f0f2f6;
+    .metric-box, .info-box, .warning-box {
+        background: var(--card-bg);
         padding: 1rem;
         border-radius: 10px;
-        border-left: 4px solid #1f77b4;
+        border-left: 4px solid var(--primary-color);
         margin: 0.5rem 0;
+        color: var(--text-color);
     }
     .info-box {
-        background: #e8f4f8;
-        padding: 1rem;
-        border-radius: 10px;
-        border-left: 4px solid #00bcd4;
-        margin: 0.5rem 0;
+        border-left-color: #00bcd4;
     }
     .warning-box {
-        background: #fff3cd;
-        padding: 1rem;
-        border-radius: 10px;
-        border-left: 4px solid #ffc107;
-        margin: 0.5rem 0;
+        border-left-color: #ffc107;
+        background: rgba(255, 193, 7, 0.1);
     }
     .stSelectbox > div > div {
-        background-color: white;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+    }
+    .stTimeInput > div > div > input {
+        color: var(--text-color);
+    }
+    .disclaimer {
+        background: rgba(255, 193, 7, 0.2);
+        border-left: 4px solid #ffc107;
+        padding: 1rem;
+        border-radius: 10px;
+        margin: 1rem 0;
+        color: var(--text-color);
     }
     </style>
 """, unsafe_allow_html=True)
@@ -92,6 +114,18 @@ def load_model():
         st.error(f"Error al cargar el modelo: {str(e)}")
         st.info("Asegúrate de que los archivos del modelo estén en la carpeta ../models/")
         return None
+
+# Función para validar la hora
+def validate_time(t):
+    """Valida que la hora esté entre 12:00 y 23:59"""
+    return t >= time(12, 0) or t <= time(0, 0)
+
+# Función para formatear la hora
+def format_hora(hora_float):
+    """Formata una hora en float a formato HH:MM"""
+    horas = int(hora_float)
+    minutos = int((hora_float - horas) * 60)
+    return f"{horas:02d}:{minutos:02d}"
 
 # Cache para obtener lista de atracciones
 @st.cache_data
@@ -124,6 +158,14 @@ def get_zone_for_attraction(_artifacts, atraccion):
 # Título principal
 st.markdown('<h1 class="main-header">Afluencia tiempos Parque Warner</h1>', unsafe_allow_html=True)
 st.markdown('<p class="sub-header">Predicción inteligente de tiempos de espera en atracciones</p>', unsafe_allow_html=True)
+
+# Aviso de no afiliación
+st.markdown("""
+<div class="disclaimer">
+    <strong>⚠️ Aviso Importante:</strong> Esta aplicación no está afiliada ni respaldada por Parque Warner Madrid. 
+    Es un proyecto independiente con fines informativos.
+</div>
+""", unsafe_allow_html=True)
 
 # Cargar modelo
 artifacts = load_model()
@@ -181,13 +223,26 @@ with st.sidebar:
     
     st.markdown("---")
     
-    # Hora
+    # Hora - Solo permitir de 12:00 a 23:59
     st.subheader("🕐 Hora")
+    hora_actual = datetime.now().time()
+    hora_inicio = time(12, 0)
+    
+    # Si la hora actual es antes de las 12:00, establecer la hora predeterminada a las 12:00
+    # De lo contrario, usar la hora actual
+    hora_predeterminada = hora_inicio if hora_actual < hora_inicio else hora_actual
+    
     hora_seleccionada = st.time_input(
-        "Selecciona la hora:",
-        value=time(12, 0),
-        help="La hora del día para la predicción"
+        "Selecciona la hora (12:00 - 23:59):",
+        value=hora_predeterminada,
+        step=1800,  # Incrementos de 30 minutos
+        help="La hora del día para la predicción (solo se permiten horas entre 12:00 y 23:59)"
     )
+    
+    # Validar que la hora esté en el rango permitido
+    if hora_seleccionada < time(12, 0):
+        st.warning("⚠️ Por favor, selecciona una hora entre 12:00 y 23:59")
+        st.stop()
     
     # Determinar tipo de hora
     hora_int = hora_seleccionada.hour
@@ -356,11 +411,14 @@ if predecir:
     with col1:
         st.subheader("ℹ️ Información de la Predicción")
         
+        # Formatear la hora correctamente
+        hora_formateada = hora_seleccionada.strftime("%H:%M")
+        
         info_items = [
             ("🎯 Ajuste Aplicado", resultado['ajuste_aplicado'].replace("_", " ").title()),
             ("📅 Día de la Semana", resultado['dia_semana']),
             ("📆 Día del Mes", f"Día {resultado['dia_mes']}"),
-            ("🕐 Hora", f"{resultado['hora']:.2f}"),
+            ("🕐 Hora", hora_formateada),  # Usar la hora formateada
             ("📊 Muestra Histórica", f"{resultado['count_historico']} registros"),
         ]
         
@@ -434,22 +492,22 @@ if predecir:
     recomendaciones = []
     
     if minutos_pred < 15:
-        recomendaciones.append("✅ **Excelente momento**: El tiempo de espera es muy bajo. Es el mejor momento para visitar esta atracción.")
+        recomendaciones.append("<strong>✅ Excelente momento</strong>: El tiempo de espera es muy bajo. Es el mejor momento para visitar esta atracción.")
     elif minutos_pred < 30:
-        recomendaciones.append("👍 **Buen momento**: El tiempo de espera es moderado. Considera visitar esta atracción ahora.")
+        recomendaciones.append("<strong>👍 Buen momento</strong>: El tiempo de espera es moderado. Considera visitar esta atracción ahora.")
     elif minutos_pred < 60:
-        recomendaciones.append("⚠️ **Tiempo moderado-alto**: El tiempo de espera es considerable. Podrías considerar esperar a otra hora o usar el sistema de acceso rápido si está disponible.")
+        recomendaciones.append("<strong>⚠️ Tiempo moderado-alto</strong>: El tiempo de espera es considerable. Podrías considerar esperar a otra hora o usar el sistema de acceso rápido si está disponible.")
     else:
-        recomendaciones.append("🚫 **Tiempo muy alto**: El tiempo de espera es muy elevado. Se recomienda visitar esta atracción en otro momento del día o considerar otras opciones.")
+        recomendaciones.append("<strong>🚫 Tiempo muy alto</strong>: El tiempo de espera es muy elevado. Se recomienda visitar esta atracción en otro momento del día o considerar otras opciones.")
     
     if resultado['es_hora_pico']:
-        recomendaciones.append("⏰ **Hora pico detectada**: Estás en el período de mayor afluencia. Considera visitar fuera de las 11:00-16:00 para tiempos de espera más cortos.")
+        recomendaciones.append("<strong>⏰ Hora pico detectada</strong>: Estás en el período de mayor afluencia. Considera visitar fuera de las 11:00-16:00 para tiempos de espera más cortos.")
     
     if resultado['es_fin_de_semana']:
-        recomendaciones.append("📅 **Fin de semana**: Los fines de semana suelen tener mayor afluencia. Si es posible, considera visitar en día laborable.")
+        recomendaciones.append("<strong>📅 Fin de semana</strong>: Los fines de semana suelen tener mayor afluencia. Si es posible, considera visitar en día laborable.")
     
     if resultado['es_batman_octubre']:
-        recomendaciones.append("🎃 **Octubre especial**: Octubre es temporada alta para Batman debido a eventos especiales. Los tiempos de espera pueden ser más altos de lo normal.")
+        recomendaciones.append("<strong>🎃 Octubre especial</strong>: Octubre es temporada alta para Batman debido a eventos especiales. Los tiempos de espera pueden ser más altos de lo normal.")
     
     for rec in recomendaciones:
         st.markdown(f"<div class='info-box'>{rec}</div>", unsafe_allow_html=True)
@@ -512,9 +570,8 @@ else:
 # Footer
 st.markdown("---")
 st.markdown(
-    "<div style='text-align: center; color: #666; padding: 1rem;'>"
+    "<div style='text-align: center; color: var(--text-color); opacity: 0.7; padding: 1rem;'>"
     "🎢 Predicción afluencias Parque Warner | Sistema de Predicción Inteligente | Powered by XGBoost & Streamlit"
     "</div>",
     unsafe_allow_html=True
 )
-
