@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from datetime import datetime, date, time
+from datetime import datetime, date, time, timedelta
 import plotly.express as px
 import plotly.graph_objects as go
 from predict import load_model_artifacts, predict_wait_time, parse_hora
@@ -27,6 +27,8 @@ st.markdown("""
         --bg-color: #fff;
         --card-bg: #f8f9fa;
         --card-border: #e9ecef;
+        --disclaimer-bg: #fff8e1;
+        --disclaimer-text: #5d4037;
     }
     
     /* Modo oscuro */
@@ -36,9 +38,28 @@ st.markdown("""
             --bg-color: #121212;
             --card-bg: #1e1e1e;
             --card-border: #333;
+            --disclaimer-bg: #332c1f;
+            --disclaimer-text: #ffecb3;
         }
     }
     
+    /* Estilos para selectores */
+    .stSelectbox > div > div {
+        background-color: var(--bg-color) !important;
+        color: var(--text-color) !important;
+        border-color: var(--card-border) !important;
+    }
+    
+    .stSelectbox > div > div > div {
+        color: var(--text-color) !important;
+    }
+    
+    .stTimeInput > div > div > input {
+        color: var(--text-color) !important;
+        background-color: var(--bg-color) !important;
+    }
+    
+    /* Estilos para las cajas de información */
     .main-header {
         font-size: 3rem;
         font-weight: bold;
@@ -46,6 +67,7 @@ st.markdown("""
         text-align: center;
         margin-bottom: 1rem;
     }
+    
     .sub-header {
         font-size: 1.2rem;
         color: var(--text-color);
@@ -53,6 +75,7 @@ st.markdown("""
         margin-bottom: 2rem;
         opacity: 0.9;
     }
+    
     .prediction-box {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         padding: 2rem;
@@ -62,15 +85,18 @@ st.markdown("""
         box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         margin: 1rem 0;
     }
+    
     .prediction-value {
         font-size: 4rem;
         font-weight: bold;
         margin: 1rem 0;
     }
+    
     .prediction-label {
         font-size: 1.5rem;
         opacity: 0.9;
     }
+    
     .metric-box, .info-box, .warning-box {
         background: var(--card-bg);
         padding: 1rem;
@@ -79,30 +105,66 @@ st.markdown("""
         margin: 0.5rem 0;
         color: var(--text-color);
     }
+    
     .info-box {
         border-left-color: #00bcd4;
     }
+    
     .warning-box {
         border-left-color: #ffc107;
         background: rgba(255, 193, 7, 0.1);
     }
-    .stSelectbox > div > div {
-        background-color: var(--bg-color);
-        color: var(--text-color);
-    }
-    .stTimeInput > div > div > input {
-        color: var(--text-color);
-    }
+    
     .disclaimer {
-        background: rgba(255, 193, 7, 0.2);
+        background: var(--disclaimer-bg) !important;
+        color: var(--disclaimer-text) !important;
         border-left: 4px solid #ffc107;
         padding: 1rem;
         border-radius: 10px;
         margin: 1rem 0;
+    }
+    
+    .disclaimer strong {
+        color: var(--disclaimer-text) !important;
+    }
+    
+    /* Footer */
+    .footer {
+        text-align: center;
         color: var(--text-color);
+        opacity: 0.7;
+        padding: 1rem;
+        margin-top: 2rem;
+        border-top: 1px solid var(--card-border);
+    }
+    
+    /* Selector de hora personalizado */
+    .time-selector {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .time-input {
+        flex: 1;
     }
     </style>
 """, unsafe_allow_html=True)
+
+# Función para generar opciones de hora
+def generate_time_options():
+    """Genera opciones de hora de 12:00 a 23:45 en intervalos de 15 minutos"""
+    times = []
+    current_time = datetime.strptime("12:00", "%H:%M")
+    end_time = datetime.strptime("23:59", "%H:%M")
+    
+    while current_time <= end_time:
+        times.append(current_time.strftime("%H:%M"))
+        current_time += timedelta(minutes=15)
+    
+    # Añadir la medianoche
+    times.append("00:00")
+    return times
 
 # Cache para cargar el modelo (solo se carga una vez)
 @st.cache_resource
@@ -114,18 +176,6 @@ def load_model():
         st.error(f"Error al cargar el modelo: {str(e)}")
         st.info("Asegúrate de que los archivos del modelo estén en la carpeta ../models/")
         return None
-
-# Función para validar la hora
-def validate_time(t):
-    """Valida que la hora esté entre 12:00 y 23:59"""
-    return t >= time(12, 0) or t <= time(0, 0)
-
-# Función para formatear la hora
-def format_hora(hora_float):
-    """Formata una hora en float a formato HH:MM"""
-    horas = int(hora_float)
-    minutos = int((hora_float - horas) * 60)
-    return f"{horas:02d}:{minutos:02d}"
 
 # Cache para obtener lista de atracciones
 @st.cache_data
@@ -223,38 +273,31 @@ with st.sidebar:
     
     st.markdown("---")
     
-    # Hora - Solo permitir de 12:00 a 23:59
+    # Selector de hora personalizado
     st.subheader("🕐 Hora")
-    hora_actual = datetime.now().time()
-    hora_inicio = time(12, 0)
     
-    # Si la hora actual es antes de las 12:00, establecer la hora predeterminada a las 12:00
-    # De lo contrario, usar la hora actual
-    hora_predeterminada = hora_inicio if hora_actual < hora_inicio else hora_actual
+    # Generar opciones de hora
+    time_options = generate_time_options()
     
-    hora_seleccionada = st.time_input(
-        "Selecciona la hora (12:00 - 23:59):",
-        value=hora_predeterminada,
-        step=1800,  # Incrementos de 30 minutos
-        help="La hora del día para la predicción (solo se permiten horas entre 12:00 y 23:59)"
+    # Seleccionar hora
+    hora_seleccionada_str = st.selectbox(
+        "Selecciona la hora (12:00 - 00:00):",
+        options=time_options,
+        index=0,  # Por defecto selecciona la primera opción (12:00)
+        help="Selecciona o escribe una hora entre 12:00 y 00:00 en intervalos de 15 minutos"
     )
     
-    # Validar que la hora esté en el rango permitido
-    if hora_seleccionada < time(12, 0):
-        st.warning("⚠️ Por favor, selecciona una hora entre 12:00 y 23:59")
-        st.stop()
+    # Convertir la hora seleccionada a objeto time
+    hora_seleccionada = datetime.strptime(hora_seleccionada_str, "%H:%M").time()
     
     # Determinar tipo de hora
     hora_int = hora_seleccionada.hour
     if hora_int >= 10 and hora_int < 11:
         tipo_hora = "🟢 Apertura"
-        color_hora = "green"
-    elif hora_int >= 11 and hora_int <= 16:
+    elif (hora_int >= 11 and hora_int <= 16) or (hora_int == 0 and hora_seleccionada.minute == 0):
         tipo_hora = "🔴 Hora Pico"
-        color_hora = "red"
     else:
         tipo_hora = "🟡 Hora Valle"
-        color_hora = "orange"
     
     st.info(f"{tipo_hora}")
     
@@ -418,7 +461,7 @@ if predecir:
             ("🎯 Ajuste Aplicado", resultado['ajuste_aplicado'].replace("_", " ").title()),
             ("📅 Día de la Semana", resultado['dia_semana']),
             ("📆 Día del Mes", f"Día {resultado['dia_mes']}"),
-            ("🕐 Hora", hora_formateada),  # Usar la hora formateada
+            ("🕐 Hora", hora_formateada),
             ("📊 Muestra Histórica", f"{resultado['count_historico']} registros"),
         ]
         
@@ -510,7 +553,7 @@ if predecir:
         recomendaciones.append("<strong>🎃 Octubre especial</strong>: Octubre es temporada alta para Batman debido a eventos especiales. Los tiempos de espera pueden ser más altos de lo normal.")
     
     for rec in recomendaciones:
-        st.markdown(f"<div class='info-box'>{rec}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='info-box' style='background: var(--card-bg); color: var(--text-color);'>{rec}</div>", unsafe_allow_html=True)
 
 else:
     # Mensaje inicial
@@ -570,8 +613,10 @@ else:
 # Footer
 st.markdown("---")
 st.markdown(
-    "<div style='text-align: center; color: var(--text-color); opacity: 0.7; padding: 1rem;'>"
-    "🎢 Predicción afluencias Parque Warner | Sistema de Predicción Inteligente | Powered by XGBoost & Streamlit"
-    "</div>",
+    """
+    <div class="footer">
+        🎢 Predicción afluencias Parque Warner | Sistema de Predicción Inteligente | Powered by XGBoost & Streamlit
+    </div>
+    """,
     unsafe_allow_html=True
 )
