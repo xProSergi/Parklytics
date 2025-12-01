@@ -59,7 +59,7 @@ html, body, .stApp {
 .hero-container {
     position: relative;
     width: 100%;
-    height: 400px;  /* Fixed height for a more compact look */
+    height: 700px;  /* Fixed height for a more compact look */
     overflow: hidden;
     margin: 0 0 2rem 0;
     padding: 0;
