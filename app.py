@@ -40,63 +40,97 @@ st.markdown("""
         max-width: 100% !important;
     }
     
-    /* Dark mode variables */
+    /* Theme variables */
     :root {
+        /* Light theme (default) */
         --primary: #2b6ef6;
+        --primary-hover: #1d4ed8;
         --text: #1e293b;
+        --text-muted: #64748b;
         --bg: #ffffff;
         --card-bg: #ffffff;
+        --card-hover: #f8fafc;
         --border: #e2e8f0;
         --shadow: rgba(0, 0, 0, 0.1);
         --sidebar-bg: #f8f9fa;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --error: #ef4444;
+        --info: #3b82f6;
     }
     
     /* Dark theme overrides */
+    [data-theme="dark"],
     @media (prefers-color-scheme: dark) {
-        :root {
+        :root:not([data-theme="light"]) {
             --text: #e2e8f0;
+            --text-muted: #94a3b8;
             --bg: #0f172a;
             --card-bg: #1e293b;
+            --card-hover: #2d3748;
             --border: #334155;
             --shadow: rgba(0, 0, 0, 0.3);
             --sidebar-bg: #1e293b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --info: #60a5fa;
         }
-        
-        /* Fix text color in dark mode */
-        .stMarkdown, .stMarkdown p, .stMarkdown li, .stMarkdown strong,
-        .stAlert, .stAlert p, .stAlert strong,
-        .stExpander .streamlit-expanderHeader,
-        .stExpander .streamlit-expanderContent,
-        .stExpander .streamlit-expanderContent p,
-        .stExpander .streamlit-expanderContent li,
-        .stSelectbox label, .stSlider label, .stDateInput label, .stTimeInput label,
-        .stButton>button {
-            color: var(--text) !important;
-        }
-        
-        /* Fix sidebar text color */
-        .sidebar .sidebar-content,
-        .sidebar .sidebar-content * {
-            color: var(--text) !important;
-        }
-        
-        /* Fix expander headers */
-        .stExpander .streamlit-expanderHeader {
-            background-color: var(--card-bg) !important;
-        }
-        
-        /* Fix cards and containers */
-        .stAlert, .stExpander, .stMarkdown > div {
-            background-color: var(--card-bg) !important;
-            border-color: var(--border) !important;
-        }
-        
-        /* Fix input fields */
-        .stTextInput input, .stSelectbox select, .stSlider .stSlider {
-            background-color: var(--bg) !important;
-            color: var(--text) !important;
-            border-color: var(--border) !important;
-        }
+    }
+    
+    /* Base styles that work in both themes */
+    body {
+        color: var(--text);
+        background-color: var(--bg);
+    }
+    
+    /* Fix text colors */
+    .stMarkdown, .stMarkdown p, .stMarkdown li, .stMarkdown strong,
+    .stAlert, .stAlert p, .stAlert strong,
+    .stExpander .streamlit-expanderHeader,
+    .stExpander .streamlit-expanderContent,
+    .stExpander .streamlit-expanderContent p,
+    .stExpander .streamlit-expanderContent li,
+    .stSelectbox label, .stSlider label, .stDateInput label, .stTimeInput label,
+    .stButton > button,
+    .stMarkdown code,
+    .stMarkdown pre,
+    .stMarkdown pre code {
+        color: var(--text) !important;
+    }
+    
+    /* Fix sidebar */
+    .sidebar .sidebar-content {
+        background-color: var(--sidebar-bg) !important;
+        color: var(--text) !important;
+    }
+    
+    /* Fix cards and containers */
+    .stAlert, .stExpander, .stMarkdown > div, .stTabs [data-baseweb="tab"] {
+        background-color: var(--card-bg) !important;
+        border-color: var(--border) !important;
+        color: var(--text) !important;
+    }
+    
+    /* Fix input fields */
+    .stTextInput input, .stSelectbox select, .stSlider .stSlider,
+    .stDateInput input, .stTimeInput input {
+        background-color: var(--bg) !important;
+        color: var(--text) !important;
+        border-color: var(--border) !important;
+    }
+    
+    /* Fix hover states */
+    .stTabs [data-baseweb="tab"]:hover {
+        background-color: var(--primary) !important;
+        color: white !important;
+    }
+    
+    /* Fix active tab */
+    .stTabs [aria-selected="true"] {
+        background-color: var(--primary) !important;
+        color: white !important;
+    }
     }
     
     /* Hero Section */
@@ -322,11 +356,13 @@ def render_sidebar():
     # Add some styling to the sidebar
     st.sidebar.markdown("""
     <style>
+        /* Sidebar base styles */
         .sidebar .sidebar-content {
             background-color: var(--sidebar-bg) !important;
             color: var(--text) !important;
         }
         
+        /* Expander styles */
         .stExpander {
             background-color: var(--card-bg) !important;
             border: 1px solid var(--border) !important;
@@ -370,6 +406,21 @@ def render_sidebar():
             border-radius: 8px !important;
             padding: 1rem !important;
             margin-bottom: 1rem !important;
+            color: var(--text) !important;
+        }
+        
+        /* Fix for metric cards */
+        .stMetric {
+            background-color: var(--card-bg) !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 8px !important;
+            padding: 1rem !important;
+            margin-bottom: 1rem !important;
+        }
+        
+        /* Fix for footer */
+        footer {
+            color: var(--text-muted) !important;
         }
     </style>
     """, unsafe_allow_html=True)
@@ -844,8 +895,8 @@ def main():
 
     # Footer
     st.markdown("---")
-    st.markdown("""
-    <div style="text-align: center; color: #6b7280; padding: 1.5rem 0;">
+    st.markdown(f"""
+    <div style="text-align: center; color: var(--text-muted); padding: 1.5rem 0;">
         🎢 ParkBeat — Predicción de tiempos de espera en tiempo real<br>
         <small>Desarrollado con ❤️ por Sergio López | v2.0</small>
     </div>
