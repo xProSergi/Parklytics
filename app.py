@@ -265,17 +265,17 @@ def render_hero():
                     font-size: 4.5rem;
                     font-weight: 800;
                     margin: 0;
-                    color: #FF7F50;  /* Coral */
+                    color: #FF8C00;  /* Mantener color original */
                     text-shadow: 0 4px 12px rgba(0,0,0,0.7);
                     line-height: 1.1;
                 }}
 
                 .hero-subtitle {{
-                    font-size: 2.4rem;
+                    font-size: 2.6rem;  /* Subimos un poco */
                     margin: 1.8rem 0 0;
-                    color: #FFF176;  /* Amarillo claro, más contrastante */
+                    color: #FFEB3B;  /* Amarillo más claro */
                     font-weight: 600;
-                    text-shadow: 0 4px 12px rgba(0,0,0,0.8);
+                    text-shadow: 0 4px 14px rgba(0,0,0,0.8);  /* Sombra más marcada */
                     line-height: 1.4;
                     letter-spacing: 0.5px;
                 }}
@@ -288,7 +288,7 @@ def render_hero():
                         font-size: 3rem;
                     }}
                     .hero-subtitle {{
-                        font-size: 1.6rem;
+                        font-size: 1.8rem;
                         margin-top: 1rem;
                     }}
                 }}
@@ -304,8 +304,8 @@ def render_hero():
         else:
             st.markdown("""
             <div style="text-align: center; padding: 2rem 0;">
-                <h1 style="color: #FF7F50; margin: 0; font-size: 3rem;">Parklytics</h1>
-                <p style="color: #FFF176; margin: 1rem 0 0; font-size: 1.8rem; font-weight: 500;">
+                <h1 style="color: #FF8C00; margin: 0; font-size: 3rem;">Parklytics</h1>
+                <p style="color: #FFEB3B; margin: 1rem 0 0; font-size: 2rem; font-weight: 500;">
                     Predicción inteligente de tiempos de espera en Parque Warner
                 </p>
             </div>
@@ -314,12 +314,13 @@ def render_hero():
         st.warning(f"Error al cargar la imagen: {e}")
         st.markdown("""
         <div style="text-align: center; padding: 2rem 0;">
-            <h1 style="color: #FF7F50; margin: 0; font-size: 3rem;">Parklytics</h1>
-            <p style="color: #FFF176; margin: 1rem 0 0; font-size: 1.8rem; font-weight: 500;">
+            <h1 style="color: #FF8C00; margin: 0; font-size: 3rem;">Parklytics</h1>
+            <p style="color: #FFEB3B; margin: 1rem 0 0; font-size: 2rem; font-weight: 500;">
                 Predicción inteligente de tiempos de espera en Parque Warner
             </p>
         </div>
         """, unsafe_allow_html=True)
+
 
 
 # -----------------------
