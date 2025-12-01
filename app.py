@@ -55,26 +55,23 @@ html, body, .stApp {
     font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
 }
 
-/* Hero Section - Updated for full image display */
+/* Hero Section - Updated for better image display */
 .hero-container {
     position: relative;
     width: 100%;
-    min-height: 500px;  /* Increased minimum height */
-    border-radius: 16px;
+    height: 400px;  /* Fixed height for a more compact look */
     overflow: hidden;
-    margin-bottom: 2rem;
+    margin: 0 0 2rem 0;
+    padding: 0;
     box-shadow: 0 10px 25px var(--shadow);
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .hero-image {
     position: absolute;
     width: 100%;
     height: 100%;
-    object-fit: contain;  /* Changed from 'cover' to 'contain' */
-    object-position: center;
+    object-fit: cover;  /* Changed back to cover but with adjusted positioning */
+    object-position: center 30%;  /* Adjust vertical position to show more of the image */
     z-index: 1;
 }
 
@@ -86,9 +83,8 @@ html, body, .stApp {
     height: 100%;
     background: linear-gradient(
         to bottom,
-        rgba(0, 0, 0, 0.1) 0%,
-        rgba(0, 0, 0, 0.5) 50%,
-        rgba(0, 0, 0, 0.9) 100%
+        rgba(0, 0, 0, 0.2) 0%,
+        rgba(0, 0, 0, 0.6) 100%
     );
     z-index: 2;
 }
@@ -96,12 +92,14 @@ html, body, .stApp {
 .hero-content {
     position: relative;
     z-index: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
     text-align: center;
     color: white;
-    padding: 2rem;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
+    padding: 0 1rem;
 }
 
 .hero-title {
@@ -239,19 +237,12 @@ def render_hero():
     try:
         hero_image_path = os.path.join("img", "fotoBatman.jpg")
         if os.path.exists(hero_image_path):
-            # Get image dimensions to set the container height
-            from PIL import Image
-            img = Image.open(hero_image_path)
-            img_width, img_height = img.size
-            aspect_ratio = img_height / img_width
-            container_height = f"min(100vh - 100px, {img_height}px)"  # Cap at viewport height minus some space
-            
             hero_image = get_base64_image(hero_image_path)
             hero_bg = f"url(data:image/jpg;base64,{hero_image})"
             
             st.markdown(f"""
-            <div class="hero-container" style="height: {container_height};">
-                <div class="hero-image" style="background: {hero_bg}; background-size: contain; background-repeat: no-repeat; background-position: center;"></div>
+            <div class="hero-container">
+                <div class="hero-image" style="background: {hero_bg}; background-size: cover; background-position: center 30%;"></div>
                 <div class="hero-overlay"></div>
                 <div class="hero-content">
                     <h1 class="hero-title">Parklytics</h1>
