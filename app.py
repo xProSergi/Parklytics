@@ -181,7 +181,7 @@ def render_hero():
 # Sidebar content
 def render_sidebar():
     with st.sidebar:
-        st.title("🎢 ParkBeat")
+        st.title(" ParkBeat")
         st.markdown("---")
         
         # Logo
@@ -198,18 +198,18 @@ def render_sidebar():
             pass
         
         # Navigation
-        st.markdown("### 📍 Navegación")
+        st.markdown("###  Navegación")
         
         menu_option = st.radio(
             "",
-            ["🏠 Inicio", "❓ ¿Qué es ParkBeat?", "🎯 ¿Por qué este proyecto?", "📊 Acerca de los datos"],
+            ["🏠 Inicio", " ¿Qué es ParkBeat?", " ¿Por qué este proyecto?", " Acerca de los datos"],
             label_visibility="collapsed"
         )
         
         st.markdown("---")
         
         # Information based on selection
-        if menu_option == "❓ ¿Qué es ParkBeat?":
+        if menu_option == " ¿Qué es ParkBeat?":
             st.markdown("""
             ### 🤔 ¿Qué es ParkBeat?
             
@@ -217,32 +217,32 @@ def render_sidebar():
             
             **Características principales:**
             
-            🎯 **Predicciones precisas** basadas en datos históricos  
-            🌤️ **Factores meteorológicos** incluidos en el modelo  
-            📅 **Análisis temporal** por fecha y hora específicas  
-            🎢 **Cobertura completa** de todas las atracciones  
+             **Predicciones precisas** basadas en datos históricos  
+             **Factores meteorológicos** incluidos en el modelo  
+             **Análisis temporal** por fecha y hora específicas  
+             **Cobertura completa** de todas las atracciones  
             
             **Objetivo:** Ayudar a los visitantes a planificar mejor su día en el parque y maximizar su experiencia.
             """)
             
-        elif menu_option == "🎯 ¿Por qué este proyecto?":
+        elif menu_option == " ¿Por qué este proyecto?":
             st.markdown("""
             ### 🎯 ¿Por qué este proyecto?
             
             **Motivación:**
             
-            👥 **Optimizar la experiencia** de los visitantes del parque  
-            ⏰ **Reducir el tiempo** perdido en colas 
-            📈 **Aprovechar datos** históricos para predicciones inteligentes  
-            🚀 **Demostrar el poder** del machine learning aplicado al ocio
+             **Optimizar la experiencia** de los visitantes del parque  
+             **Reducir el tiempo** perdido en colas 
+             **Aprovechar datos** históricos para predicciones inteligentes  
+             **Demostrar el poder** del machine learning aplicado al ocio
             
             **Tecnologías utilizadas:**
             
-            • 🤖 Machine Learning con Python  
-            • 📊 Análisis de datos con Pandas y NumPy  
-            • 🎨 Visualización con Plotly  
-            • 🌐 Despliegue con Streamlit  
-            • ☁️ Modelos en producción  
+            •  Machine Learning con Python  
+            •  Análisis de datos con Pandas y NumPy  
+            •  Visualización con Plotly  
+            •  Despliegue con Streamlit  
+            •  Modelos en producción  
             
             **Desarrollado con ❤️ por** Sergio López
             """)
@@ -290,7 +290,7 @@ def main():
     
     # Welcome Section
     st.markdown("""
-    ## 🎢 Bienvenido a ParkBeat
+    ##  Bienvenido a ParkBeat
     
     Predice los tiempos de espera en las atracciones del Parque Warner Madrid con precisión. 
     Simplemente selecciona una atracción, la fecha y la hora de tu visita, y te mostraremos una 
@@ -332,7 +332,7 @@ def main():
     zonas = get_zones()
 
     # Main Controls Section
-    st.markdown("## ⚙️ Configura tu predicción")
+    st.markdown("##  Configura tu predicción")
     
     # Create columns for better organization
     col1, col2 = st.columns(2)
@@ -340,7 +340,7 @@ def main():
     with col1:
         # Attraction selection
         with st.container():
-            st.markdown("### 🎢 Selecciona una atracción")
+            st.markdown("###  Selecciona una atracción")
             atraccion_seleccionada = st.selectbox(
                 "Elige una atracción de la lista",
                 options=atracciones,
@@ -352,7 +352,7 @@ def main():
             # Auto-detect zone
             zona_auto = get_zone_for_attraction(atraccion_seleccionada)
             if zona_auto:
-                st.info(f"📍 **Zona:** {zona_auto}")
+                st.info(f" **Zona:** {zona_auto}")
 
     with col2:
         # Date and time selection
@@ -384,7 +384,7 @@ def main():
             }
             dia_nombre = fecha_seleccionada.strftime("%A")
             es_fin_semana = fecha_seleccionada.weekday() >= 5
-            st.info(f"📆 **Día:** {dia_semana_es.get(dia_nombre, dia_nombre)} - {'Fin de semana' if es_fin_semana else 'Día laborable'}")
+            st.info(f" **Día:** {dia_semana_es.get(dia_nombre, dia_nombre)} - {'Fin de semana' if es_fin_semana else 'Día laborable'}")
 
     # Weather Section
     with st.expander("🌤️ Configurar condiciones meteorológicas (opcional)", expanded=False):
@@ -433,7 +433,7 @@ def main():
 
     # Prediction button
     predecir = st.button(
-        "🚀 Calcular tiempo de espera",
+        " Calcular tiempo de espera",
         type="primary",
         use_container_width=True,
         key="predict_button_main"
@@ -457,7 +457,7 @@ def main():
         }
 
         # Make prediction
-        with st.spinner("🔮 Calculando predicción..."):
+        with st.spinner(" Calculando predicción..."):
             try:
                 resultado = predict_wait_time(input_data, artifacts)
                 minutos_pred = resultado.get("minutos_predichos", 0)
@@ -477,7 +477,7 @@ def main():
                     emoji, nivel = "🔴", "Muy Alto"
 
                 # Display results
-                st.markdown("## 📊 Resultados de la predicción")
+                st.markdown("##  Resultados de la predicción")
                 
                 # Main prediction card
                 st.markdown(f"""
@@ -687,7 +687,7 @@ def main():
     # How it works section (shown when no prediction has been made)
     if not predecir:
         st.markdown("""
-        ## 🎯 ¿Cómo funciona?
+        ##  ¿Cómo funciona?
         
         1. **Selecciona una atracción** de la lista desplegable
         2. **Elige la fecha y hora** de tu visita
@@ -696,7 +696,7 @@ def main():
         
         ¡Obtendrás una predicción precisa basada en datos históricos y condiciones actuales!
         
-        ### 📊 Estadísticas rápidas
+        ###  Estadísticas rápidas
         """)
         
         # Quick stats
