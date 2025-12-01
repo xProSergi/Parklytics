@@ -27,16 +27,30 @@ st.set_page_config(
 # Custom CSS
 st.markdown("""
 <style>
-    /* Base Styles */
+    /* Override Streamlit's default padding */
+    .stApp {
+        padding: 0 !important;
+        max-width: 100% !important;
+    }
+    
+    /* Main content container */
+    .main .block-container {
+        padding: 0 !important;
+        max-width: 100% !important;
+    }
+    
+    /* Hero Section */
     .hero-container {
         position: relative;
-        width: 100%;
+        width: 100vw;
         height: 500px;
         overflow: hidden;
-        margin: -1rem 0 2rem 0;
+        margin: 0;
         padding: 0;
-        max-width: 100%;
-        border-radius: 0;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw !important;
+        margin-right: -50vw !important;
     }
     
     .hero-image {
@@ -54,10 +68,10 @@ st.markdown("""
         height: 100%;
         background: linear-gradient(
             to bottom,
-            rgba(0, 0, 0, 0.2) 0%,
-            rgba(255, 69, 0, 0.2) 30%,
-            rgba(255, 165, 0, 0.15) 60%,
-            rgba(0, 0, 0, 0.6) 100%
+            rgba(0, 0, 0, 0.3) 0%,
+            rgba(255, 87, 34, 0.3) 30%,
+            rgba(255, 152, 0, 0.3) 60%,
+            rgba(0, 0, 0, 0.7) 100%
         );
     }
     
@@ -67,25 +81,52 @@ st.markdown("""
         left: 50%;
         transform: translate(-50%, -50%);
         text-align: center;
-        color: white;
         width: 100%;
         padding: 0 1rem;
     }
     
+    @import url('https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Russo+One&display=swap');
+    
     .hero-title {
-        font-size: 4rem;
+        font-family: 'Bungee Shade', cursive;
+        font-size: 5.5rem;
         font-weight: 800;
         margin: 0;
-        color: #FF8C00;
-        text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        color: #FFC107;
+        text-shadow: 
+            0 0 10px rgba(255, 152, 0, 0.8),
+            0 0 20px rgba(255, 87, 34, 0.6),
+            0 0 30px rgba(255, 193, 7, 0.4);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        -webkit-text-stroke: 1px rgba(0, 0, 0, 0.3);
+        animation: glow 2s ease-in-out infinite alternate;
+    }
+    
+    @keyframes glow {
+        from {
+            text-shadow: 
+                0 0 5px #FFC107,
+                0 0 10px #FF9800,
+                0 0 15px #FF5722;
+        }
+        to {
+            text-shadow: 
+                0 0 10px #FFC107,
+                0 0 20px #FF9800,
+                0 0 30px #FF5722,
+                0 0 40px #FF5722;
+        }
     }
     
     .hero-subtitle {
-        font-size: 2rem;
+        font-family: 'Russo One', sans-serif;
+        font-size: 2.2rem;
         margin: 1rem 0 0;
-        color: #FFD54F;
-        font-weight: 700;
-        text-shadow: 0 4px 18px rgba(0,0,0,0.85);
+        color: #FFFFFF;
+        font-weight: 400;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        letter-spacing: 1px;
     }
     
     /* Card Styles */
@@ -154,7 +195,7 @@ def main():
     
     # Welcome Section
     st.markdown("""
-    ##  Bienvenido a ParkBeat
+    ## 🎢 Bienvenido a ParkBeat
     
     Predice los tiempos de espera en las atracciones del Parque Warner Madrid con precisión. 
     Simplemente selecciona una atracción, la fecha y la hora de tu visita, y te mostraremos una 
@@ -196,7 +237,7 @@ def main():
     zonas = get_zones()
 
     # Main Controls Section
-    st.markdown("##  Configura tu predicción")
+    st.markdown("## ⚙️ Configura tu predicción")
     
     # Create columns for better organization
     col1, col2 = st.columns(2)
