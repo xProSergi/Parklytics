@@ -285,20 +285,18 @@ Desde 2007 (primera vez que visité el parque), Parque Warner ha sido una parte 
 
 
 def main():
-   
     render_sidebar()
     
-    
     render_hero()
-    
 
     st.markdown("""
     <div style="background: #fff8e6; color: #5c3d00; padding: 1rem; border-radius: 12px; 
-                border-left: 4px solid #ffc107; margin-bottom: 2rem;">
+                border-left: 4px solid #ffc107; margin-bottom: 2rem; margin-top: 3rem;">
         <strong>⚠️ Aviso:</strong> Esta aplicación es independiente y educativa. 
         No está afiliada a Parque Warner.
     </div>
     """, unsafe_allow_html=True)
+
     
     st.markdown("""
     ##  Bienvenido a ParkBeat
