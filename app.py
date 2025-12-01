@@ -27,30 +27,16 @@ st.set_page_config(
 # Custom CSS
 st.markdown("""
 <style>
-    /* Override Streamlit's default padding */
-    .stApp {
-        padding: 0 !important;
-        max-width: 100% !important;
-    }
-    
-    /* Main content container */
-    .main .block-container {
-        padding: 0 !important;
-        max-width: 100% !important;
-    }
-    
-    /* Hero Section */
+    /* Base Styles */
     .hero-container {
         position: relative;
-        width: 100vw;
+        width: 100%;
         height: 500px;
         overflow: hidden;
-        margin: 0;
+        margin: -1rem 0 2rem 0;
         padding: 0;
-        left: 50%;
-        right: 50%;
-        margin-left: -50vw !important;
-        margin-right: -50vw !important;
+        max-width: 100%;
+        border-radius: 0;
     }
     
     .hero-image {
@@ -68,10 +54,10 @@ st.markdown("""
         height: 100%;
         background: linear-gradient(
             to bottom,
-            rgba(0, 0, 0, 0.3) 0%,
-            rgba(255, 87, 34, 0.3) 30%,
-            rgba(255, 152, 0, 0.3) 60%,
-            rgba(0, 0, 0, 0.7) 100%
+            rgba(0, 0, 0, 0.2) 0%,
+            rgba(255, 69, 0, 0.2) 30%,
+            rgba(255, 165, 0, 0.15) 60%,
+            rgba(0, 0, 0, 0.6) 100%
         );
     }
     
@@ -81,52 +67,25 @@ st.markdown("""
         left: 50%;
         transform: translate(-50%, -50%);
         text-align: center;
+        color: white;
         width: 100%;
         padding: 0 1rem;
     }
     
-    @import url('https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Russo+One&display=swap');
-    
     .hero-title {
-        font-family: 'Bungee Shade', cursive;
-        font-size: 5.5rem;
+        font-size: 4rem;
         font-weight: 800;
         margin: 0;
-        color: #FFC107;
-        text-shadow: 
-            0 0 10px rgba(255, 152, 0, 0.8),
-            0 0 20px rgba(255, 87, 34, 0.6),
-            0 0 30px rgba(255, 193, 7, 0.4);
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        -webkit-text-stroke: 1px rgba(0, 0, 0, 0.3);
-        animation: glow 2s ease-in-out infinite alternate;
-    }
-    
-    @keyframes glow {
-        from {
-            text-shadow: 
-                0 0 5px #FFC107,
-                0 0 10px #FF9800,
-                0 0 15px #FF5722;
-        }
-        to {
-            text-shadow: 
-                0 0 10px #FFC107,
-                0 0 20px #FF9800,
-                0 0 30px #FF5722,
-                0 0 40px #FF5722;
-        }
+        color: #FF8C00;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
     
     .hero-subtitle {
-        font-family: 'Russo One', sans-serif;
-        font-size: 2.2rem;
+        font-size: 2rem;
         margin: 1rem 0 0;
-        color: #FFFFFF;
-        font-weight: 400;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-        letter-spacing: 1px;
+        color: #FFD54F;
+        font-weight: 700;
+        text-shadow: 0 4px 18px rgba(0,0,0,0.85);
     }
     
     /* Card Styles */
@@ -168,10 +127,75 @@ def render_hero():
     try:
         hero_image_path = os.path.join("img", "fotoBatman.jpg")
         hero_image = get_base64_image(hero_image_path)
-        
+
         st.markdown(f"""
+        <style>
+            /* Contenedor del hero */
+            .hero-container {{
+                position: relative;
+                width: 100vw;
+                height: 80vh;
+                overflow: hidden;
+                margin: 0;
+                padding: 0;
+            }}
+
+            /* Imagen de fondo */
+            .hero-image {{
+                width: 100%;
+                height: 100%;
+                object-fit: cover; /* ocupa todo el contenedor sin deformarse */
+                display: block;
+            }}
+
+            /* Overlay oscuro para contraste */
+            .hero-overlay {{
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4));
+            }}
+
+            /* Contenido del hero */
+            .hero-content {{
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                text-align: center;
+                color: #fff;
+                z-index: 2;
+                padding: 0 1rem;
+            }}
+
+            .hero-title {{
+                font-family: 'Poppins', sans-serif;
+                font-size: 4rem;
+                font-weight: 800;
+                margin: 0;
+                letter-spacing: 2px;
+                text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+            }}
+
+            .hero-subtitle {{
+                font-family: 'Poppins', sans-serif;
+                font-size: 1.5rem;
+                margin-top: 1rem;
+                font-weight: 500;
+                text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+            }}
+
+            /* Responsivo */
+            @media (max-width: 768px) {{
+                .hero-title {{ font-size: 3rem; }}
+                .hero-subtitle {{ font-size: 1.2rem; }}
+            }}
+        </style>
+
         <div class="hero-container">
-            <img src="data:image/jpg;base64,{hero_image}" class="hero-image" alt="Parque Warner Madrid">
+            <img src="data:image/jpg;base64,{hero_image}" class="hero-image" alt="Parque">
             <div class="hero-overlay"></div>
             <div class="hero-content">
                 <h1 class="hero-title">ParkBeat</h1>
@@ -179,15 +203,17 @@ def render_hero():
             </div>
         </div>
         """, unsafe_allow_html=True)
+
     except Exception as e:
-        st.markdown("""
-        <div style="text-align: center; padding: 3rem 0; background: #f8f9fa; border-radius: 12px; margin-bottom: 2rem;">
-            <h1 style="color: #2b6ef6; margin: 0; font-size: 3rem; font-weight: 800;">ParkBeat</h1>
-            <p style="color: #4a5568; margin: 0.5rem 0 0; font-size: 1.5rem; font-weight: 500;">
+        st.markdown(f"""
+        <div style="text-align:center; padding:3rem 0; background:#1a1a1a; color:#fff; margin:0;">
+            <h1 style="font-family:'Poppins',sans-serif; font-size:3rem; font-weight:800; margin:0;">ParkBeat</h1>
+            <p style="font-family:'Poppins',sans-serif; font-size:1.5rem; font-weight:500; margin-top:1rem;">
                 Predicción de tiempos de espera en tiempo real
             </p>
         </div>
         """, unsafe_allow_html=True)
+
 
 def main():
     # Hero Section
@@ -195,7 +221,7 @@ def main():
     
     # Welcome Section
     st.markdown("""
-    ## 🎢 Bienvenido a ParkBeat
+    ##  Bienvenido a ParkBeat
     
     Predice los tiempos de espera en las atracciones del Parque Warner Madrid con precisión. 
     Simplemente selecciona una atracción, la fecha y la hora de tu visita, y te mostraremos una 
@@ -237,7 +263,7 @@ def main():
     zonas = get_zones()
 
     # Main Controls Section
-    st.markdown("## ⚙️ Configura tu predicción")
+    st.markdown("##  Configura tu predicción")
     
     # Create columns for better organization
     col1, col2 = st.columns(2)
