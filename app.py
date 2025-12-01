@@ -229,13 +229,13 @@ def render_sidebar():
             st.markdown("""
             ### 🎯 ¿Por qué este proyecto?
             
-            ** Motivación: **
+            **Motivación:**
             
 Soy un apasionado de los parques temáticos desde que tengo memoria, y mejorar la experiencia del visitante, especialmente en aspectos como los tiempos de espera, es lo que realmente me inspira.
 Desde 2007 (primera vez que visité el parque), Parque Warner ha sido una parte fundamental de mi vida. Podría decirse que he crecido junto a él, y con el tiempo, mi amor por el parque se ha fusionado con mi pasión por el análisis de datos, lo que ha dado lugar a la creación de ParkBeat.      
       
             
-            ** Tecnologías utilizadas: **
+            **Tecnologías utilizadas:**
             
             •  Machine Learning con Python  
             •  Análisis de datos con Pandas y NumPy  
@@ -726,7 +726,7 @@ def main():
     st.markdown("""
     <div style="text-align: center; color: var(--text-color); opacity: 0.7; padding: 1.5rem 0;">
         🎢 ParkBeat — Predicción de tiempos de espera en tiempo real<br>
-        <small>Desarrollado con ❤️ por Sergio López | v2.0</small>
+        <small>Desarrollado con ❤️ por Sergio López | v1.0</small>
     </div>
     """, unsafe_allow_html=True)
 
