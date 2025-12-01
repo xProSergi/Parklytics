@@ -229,13 +229,13 @@ def render_sidebar():
             st.markdown("""
             ### 🎯 ¿Por qué este proyecto?
             
-            **Motivación:**
+            ** Motivación: **
             
 Soy un apasionado de los parques temáticos desde que tengo memoria, y mejorar la experiencia del visitante, especialmente en aspectos como los tiempos de espera, es lo que realmente me inspira.
 Desde 2007 (primera vez que visité el parque), Parque Warner ha sido una parte fundamental de mi vida. Podría decirse que he crecido junto a él, y con el tiempo, mi amor por el parque se ha fusionado con mi pasión por el análisis de datos, lo que ha dado lugar a la creación de ParkBeat.      
       
             
-            **Tecnologías utilizadas:**
+            ** Tecnologías utilizadas: **
             
             •  Machine Learning con Python  
             •  Análisis de datos con Pandas y NumPy  
@@ -246,9 +246,9 @@ Desde 2007 (primera vez que visité el parque), Parque Warner ha sido una parte 
             **Desarrollado con ❤️ por** Sergio López
             """)
             
-        elif menu_option == "📊 Acerca de los datos":
+        elif menu_option == " Acerca de los datos":
             st.markdown("""
-            ### 📊 Acerca de los datos
+            ###  Acerca de los datos
             
             **Fuente de datos:**
             
@@ -291,6 +291,14 @@ def main():
     
     render_hero()
     
+
+    st.markdown("""
+    <div style="background: #fff8e6; color: #5c3d00; padding: 1rem; border-radius: 12px; 
+                border-left: 4px solid #ffc107; margin-bottom: 2rem;">
+        <strong>⚠️ Aviso:</strong> Esta aplicación es independiente y educativa. 
+        No está afiliada a Parque Warner.
+    </div>
+    """, unsafe_allow_html=True)
     
     st.markdown("""
     ##  Bienvenido a ParkBeat
