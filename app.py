@@ -21,7 +21,7 @@ st.set_page_config(
     page_title="ParkBeat — Predicción Parque Warner",
     page_icon="img/logoParklytics.png",
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="expanded"
 )
 
 # Custom CSS
@@ -202,7 +202,7 @@ def render_hero():
             <div class="hero-container">
                 <div class="hero-overlay"></div>
                 <div class="hero-content">
-                    <h1 class="hero-title">ParkBeat</h1>
+                    <h1 class="hero-title">Parklytics</h1>
                     <p class="hero-subtitle">Predicción inteligente de tiempos de espera en Parque Warner</p>
                 </div>
             </div>
@@ -212,7 +212,7 @@ def render_hero():
             st.markdown("""
             <div style="text-align: center; padding: 3rem 0; background:#000;">
                 <h1 style="color:#FF8C00; font-size:3rem; font-weight:800; text-shadow:2px 2px 10px rgba(0,0,0,0.7); font-family:Poppins,sans-serif;">
-                    ParkBeat
+                    Parklytics
                 </h1>
                 <p style="color:#FFD54F; font-size:1.5rem; font-weight:700; text-shadow:2px 2px 10px rgba(0,0,0,0.7); font-family:Poppins,sans-serif;">
                     Predicción inteligente de tiempos de espera en Parque Warner
@@ -224,14 +224,72 @@ def render_hero():
         st.warning(f"Error al cargar la imagen: {e}")
 
 
+def render_sidebar():
+    # Add logo at the top of the sidebar
+    try:
+        logo_path = os.path.join("img", "logoParklytics.png")
+        if os.path.exists(logo_path):
+            logo_image = get_base64_image(logo_path)
+            st.sidebar.markdown(f"""
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <img src="data:image/png;base64,{logo_image}" style="max-width: 100%; height: auto;">
+            </div>
+            """, unsafe_allow_html=True)
+    except Exception as e:
+        st.sidebar.warning(f"Error al cargar el logo: {e}")
+    
+    # Add sections with expandable content
+    with st.sidebar.expander("ℹ️ ¿Qué es ParkBeat?", expanded=False):
+        st.markdown("""
+        **ParkBeat** es una herramienta de predicción inteligente que te ayuda a planificar tu visita al Parque Warner Madrid.
+        
+        Con nuestra tecnología avanzada de machine learning, podrás:
+        - Predecir los tiempos de espera en tiempo real
+        - Planificar tu ruta óptima por el parque
+        - Ahorrar tiempo y disfrutar al máximo de tu visita
+        """)
+    
+    with st.sidebar.expander("❓ ¿Por qué este proyecto?", expanded=False):
+        st.markdown("""
+        Este proyecto nace con el objetivo de mejorar la experiencia de los visitantes del Parque Warner Madrid mediante:
+        
+        - **Tecnología avanzada**: Utilizando modelos predictivos para estimar tiempos de espera
+        - **Datos en tiempo real**: Analizando patrones históricos y condiciones actuales
+        - **Experiencia personalizada**: Ofreciendo recomendaciones basadas en tus preferencias
+        
+        ¡Porque tu tiempo es valioso y mereces aprovecharlo al máximo!
+        """)
+    
+    # Add some styling to the sidebar
+    st.sidebar.markdown("""
+    <style>
+        .sidebar .sidebar-content {
+            background-color: #f8f9fa;
+        }
+        .stExpander {
+            background-color: white;
+            border-radius: 8px;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .stExpander .streamlit-expanderHeader {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+    </style>
+    """, unsafe_allow_html=True)
 
 def main():
+    # Render sidebar first
+    render_sidebar()
+    
     # Hero Section
     render_hero()
     
     # Welcome Section
     st.markdown("""
-    ##  Bienvenido a ParkBeat
+    ## 🎢 Bienvenido a ParkBeat
     
     Predice los tiempos de espera en las atracciones del Parque Warner Madrid con precisión. 
     Simplemente selecciona una atracción, la fecha y la hora de tu visita, y te mostraremos una 
@@ -273,7 +331,7 @@ def main():
     zonas = get_zones()
 
     # Main Controls Section
-    st.markdown("##  Configura tu predicción")
+    st.markdown("## ⚙️ Configura tu predicción")
     
     # Create columns for better organization
     col1, col2 = st.columns(2)
