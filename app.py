@@ -19,6 +19,13 @@ def get_base64_image(image_path):
     with open(image_path, "rb") as img_file:
         return base64.b64encode(img_file.read()).decode('utf-8')
 
+def is_dark_theme():
+    """Check if the app is in dark mode"""
+    try:
+        return st._config.get_option("theme.base") == "dark"
+    except:
+        return False
+
 # -----------------------
 # PAGE CONFIGURATION
 # -----------------------
@@ -32,212 +39,254 @@ st.set_page_config(
 # -----------------------
 # CSS STYLING
 # -----------------------
-st.markdown("""
-<style>
-:root {
-    --primary: #2b6ef6;
-    --accent: #6c63ff;
-    --muted: #6b7280;
-    --bg: #ffffff;
-    --text: #111827;
-    --card: #f8fafc;
-    --border: #e6e9ee;
-}
+def load_css():
+    dark_mode = is_dark_theme()
+    
+    # Base colors
+    if dark_mode:
+        bg_color = "#0E1117"
+        card_bg = "#1E293B"
+        text_color = "#F8FAFC"
+        border_color = "#2D3748"
+        muted_color = "#94A3B8"
+    else:
+        bg_color = "#FFFFFF"
+        card_bg = "#F8FAFC"
+        text_color = "#111827"
+        border_color = "#E2E8F0"
+        muted_color = "#64748B"
+    
+    css = f"""
+    <style>
+    :root {{
+        --primary: #2b6ef6;
+        --accent: #6c63ff;
+        --success: #10B981;
+        --warning: #F59E0B;
+        --danger: #EF4444;
+        --muted: {muted_color};
+        --bg: {bg_color};
+        --text: {text_color};
+        --card: {card_bg};
+        --border: {border_color};
+        --shadow: {'rgba(0, 0, 0, 0.1)' if not dark_mode else 'rgba(0, 0, 0, 0.3)'};
+    }}
 
-html, body, .stApp {
-    background: var(--bg) !important;
-    color: var(--text) !important;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
-}
+    /* Base Styles */
+    html, body, .stApp {{
+        background: var(--bg) !important;
+        color: var(--text) !important;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }}
 
-/* Hero Section */
-.hero-container {
-    position: relative;
-    width: 100%;
-    height: 320px;
-    border-radius: 16px;
-    overflow: hidden;
-    margin-bottom: 2rem;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-}
+    /* Hero Section */
+    .hero-container {{
+        position: relative;
+        width: 100%;
+        height: 400px;
+        border-radius: 16px;
+        overflow: hidden;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 25px var(--shadow);
+    }}
 
-.hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.2) 0%,
-        rgba(0, 0, 0, 0.6) 100%
-    );
-}
+    .hero-image {{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 30%;
+    }}
 
-.hero-content {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    text-align: center;
-    padding: 2rem;
-    z-index: 2;
-}
+    .hero-overlay {{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.2) 0%,
+            rgba(0, 0, 0, 0.7) 100%
+        );
+    }}
 
-.hero-title {
-    font-size: 3.2rem;
-    font-weight: 800;
-    margin: 0;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    line-height: 1.1;
-}
+    .hero-content {{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        text-align: center;
+        padding: 2rem;
+        z-index: 2;
+    }}
 
-.hero-subtitle {
-    font-size: 1.3rem;
-    margin: 0.8rem 0 0;
-    font-weight: 400;
-    max-width: 700px;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    opacity: 0.95;
-}
+    .hero-title {{
+        font-size: 3.2rem;
+        font-weight: 800;
+        margin: 0;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        line-height: 1.1;
+    }}
 
-/* Prediction Card */
-.prediction-card {
-    background: white;
-    border-radius: 14px;
-    padding: 2rem;
-    margin: 1.5rem 0;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-    border: 1px solid var(--border);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
+    .hero-subtitle {{
+        font-size: 1.3rem;
+        margin: 0.8rem 0 0;
+        font-weight: 400;
+        max-width: 700px;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        opacity: 0.95;
+    }}
 
-.prediction-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-}
+    /* Prediction Card */
+    .prediction-card {{
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 2rem;
+        margin: 1.5rem 0;
+        box-shadow: 0 4px 20px var(--shadow);
+        transition: all 0.3s ease;
+    }}
 
-.prediction-value {
-    font-size: 3.5rem;
-    font-weight: 800;
-    line-height: 1;
-    margin: 0.5rem 0;
-    background: var(--gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+    .prediction-card:hover {{
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px var(--shadow);
+    }}
 
-.prediction-label {
-    font-size: 1.1rem;
-    color: var(--muted);
-    margin-top: 0.5rem;
-}
+    .prediction-value {{
+        font-size: 3.5rem;
+        font-weight: 800;
+        line-height: 1;
+        margin: 0.5rem 0;
+        background: var(--gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }}
 
-/* Info Cards */
-.info-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.25rem;
-    margin-bottom: 1rem;
-    transition: all 0.2s ease;
-}
-
-.info-card:hover {
-    border-color: var(--primary);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-}
-
-/* Buttons */
-.stButton>button {
-    background: linear-gradient(90deg, var(--primary), var(--accent)) !important;
-    color: white !important;
-    border: none !important;
-    padding: 0.7rem 1.5rem !important;
-    border-radius: 10px !important;
-    font-weight: 600 !important;
-    font-size: 1rem !important;
-    transition: all 0.2s ease !important;
-    width: 100%;
-}
-
-.stButton>button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(43, 110, 246, 0.3) !important;
-}
-
-/* Sliders */
-.stSlider .stSliderThumb {
-    background: var(--primary) !important;
-}
-
-/* Tabs */
-.stTabs [data-baseweb="tab-list"] {
-    gap: 8px;
-}
-
-.stTabs [data-baseweb="tab"] {
-    padding: 10px 20px;
-    border-radius: 8px;
-    transition: all 0.2s;
-}
-
-.stTabs [aria-selected="true"] {
-    background: var(--primary);
-    color: white !important;
-}
-
-/* Footer */
-.footer {
-    color: var(--muted);
-    text-align: center;
-    padding: 1.5rem 0;
-    margin-top: 3rem;
-    border-top: 1px solid var(--border);
-    font-size: 0.9rem;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .hero-title {
-        font-size: 2.2rem;
-    }
-    .hero-subtitle {
+    .prediction-label {{
         font-size: 1.1rem;
-    }
-    .prediction-value {
-        font-size: 2.8rem;
-    }
-}
-</style>
-""", unsafe_allow_html=True)
+        color: var(--muted);
+        margin-top: 0.5rem;
+    }}
+
+    /* Info Cards */
+    .info-card {{
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+        transition: all 0.2s ease;
+    }}
+
+    .info-card:hover {{
+        border-color: var(--primary);
+        box-shadow: 0 5px 15px var(--shadow);
+    }}
+
+    /* Form Elements */
+    .stSelectbox, .stSlider, .stDateInput, .stTimeInput {{
+        background: var(--card);
+        border-radius: 8px;
+        padding: 8px;
+        border: 1px solid var(--border);
+    }}
+
+    .stSlider .stSliderThumb {{
+        background: var(--primary) !important;
+    }}
+
+    .stSlider .stSliderTrack {{
+        background: var(--border) !important;
+    }}
+
+    /* Buttons */
+    .stButton>button {{
+        background: linear-gradient(90deg, var(--primary), var(--accent)) !important;
+        color: white !important;
+        border: none !important;
+        padding: 0.7rem 1.5rem !important;
+        border-radius: 10px !important;
+        font-weight: 600 !important;
+        font-size: 1rem !important;
+        transition: all 0.2s ease !important;
+        width: 100%;
+    }}
+
+    .stButton>button:hover {{
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(43, 110, 246, 0.3) !important;
+    }}
+
+    /* Tabs */
+    .stTabs [data-baseweb="tab-list"] {{
+        gap: 8px;
+    }}
+
+    .stTabs [data-baseweb="tab"] {{
+        padding: 10px 20px;
+        border-radius: 8px;
+        transition: all 0.2s;
+        background: var(--card) !important;
+        color: var(--text) !important;
+    }}
+
+    .stTabs [aria-selected="true"] {{
+        background: var(--primary) !important;
+        color: white !important;
+    }}
+
+    /* Footer */
+    .footer {{
+        color: var(--muted);
+        text-align: center;
+        padding: 1.5rem 0;
+        margin-top: 3rem;
+        border-top: 1px solid var(--border);
+        font-size: 0.9rem;
+    }}
+
+    /* Responsive Design */
+    @media (max-width: 768px) {{
+        .hero-container {{
+            height: 300px;
+        }}
+        .hero-title {{
+            font-size: 2.5rem;
+        }}
+        .prediction-value {{
+            font-size: 2.8rem;
+        }}
+    }}
+    </style>
+    """
+    st.markdown(css, unsafe_allow_html=True)
 
 # -----------------------
 # HERO SECTION
 # -----------------------
 def render_hero():
-    # Try to load the hero image, fallback to a gradient
     try:
-        # Try local image first
         hero_image_path = os.path.join("img", "fotoBatman.jpg")
         if os.path.exists(hero_image_path):
             hero_image = get_base64_image(hero_image_path)
             hero_bg = f"url(data:image/jpg;base64,{hero_image})"
         else:
-            # Fallback to a gradient background
             hero_bg = "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
     except Exception as e:
         st.warning(f"Could not load hero image: {e}")
         hero_bg = "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
 
     st.markdown(f"""
-    <div class="hero-container" style="background: {hero_bg}; background-size: cover; background-position: center;">
+    <div class="hero-container">
+        <div class="hero-image" style="background: {hero_bg}; background-size: cover; background-position: center;"></div>
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <h1 class="hero-title">Parklytics</h1>
@@ -247,16 +296,73 @@ def render_hero():
     """, unsafe_allow_html=True)
 
 # -----------------------
+# WEATHER CONTROLS
+# -----------------------
+def render_weather_controls():
+    st.markdown("#### 🌤️ Condiciones meteorológicas")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        temperatura = st.slider(
+            "Temperatura (°C)", 
+            min_value=-5, 
+            max_value=45, 
+            value=22,
+            help="Temperatura en grados Celsius",
+            key="temp_slider"
+        )
+    with col2:
+        humedad = st.slider(
+            "Humedad (%)", 
+            min_value=0, 
+            max_value=100, 
+            value=60,
+            key="humidity_slider"
+        )
+
+    st.markdown("<div style='margin: 1.5rem 0;'></div>", unsafe_allow_html=True)
+    
+    sensacion_termica = st.slider(
+        "Sensación térmica (°C)", 
+        min_value=-10, 
+        max_value=50, 
+        value=temperatura,
+        key="feels_like_slider"
+    )
+
+    st.markdown("<div style='margin: 0.5rem 0;'></div>", unsafe_allow_html=True)
+    
+    codigo_clima = st.selectbox(
+        "Condición meteorológica",
+        options=[1, 2, 3, 4, 5],
+        index=2,
+        format_func=lambda x: {
+            1: "☀️ Soleado - Excelente",
+            2: "⛅ Parcialmente nublado - Bueno",
+            3: "☁️ Nublado - Normal",
+            4: "🌧️ Lluvia ligera - Malo",
+            5: "⛈️ Lluvia fuerte/Tormenta - Muy malo"
+        }[x]
+    )
+    
+    return temperatura, humedad, sensacion_termica, codigo_clima
+
+# -----------------------
 # MAIN APP
 # -----------------------
 def main():
+    # Load CSS first
+    load_css()
+    
     # Render hero section
     render_hero()
 
     # Disclaimer
     st.markdown("""
-    <div style="background: #fff8e6; color: #5c3d00; padding: 1rem; border-radius: 12px; 
-                border-left: 4px solid #ffc107; margin-bottom: 2rem;">
+    <div style="background: var(--card); color: var(--text); 
+                padding: 1rem; border-radius: 12px; 
+                border-left: 4px solid var(--warning);
+                margin-bottom: 2rem; border: 1px solid var(--border);">
         <strong>⚠️ Aviso:</strong> Esta aplicación es independiente y educativa. 
         No está afiliada a Parque Warner.
     </div>
@@ -360,43 +466,7 @@ def main():
         st.markdown("---")
 
         # Weather settings
-        st.markdown("#### 🌤️ Condiciones meteorológicas")
-        col1, col2 = st.columns(2)
-        with col1:
-            temperatura = st.slider(
-                "Temperatura (°C)", 
-                min_value=-5, 
-                max_value=45, 
-                value=22,
-                help="Temperatura en grados Celsius"
-            )
-        with col2:
-            humedad = st.slider(
-                "Humedad (%)", 
-                min_value=0, 
-                max_value=100, 
-                value=60
-            )
-
-        sensacion_termica = st.slider(
-            "Sensación térmica (°C)", 
-            min_value=-10, 
-            max_value=50, 
-            value=temperatura
-        )
-
-        codigo_clima = st.selectbox(
-            "Condición meteorológica",
-            options=[1, 2, 3, 4, 5],
-            index=2,
-            format_func=lambda x: {
-                1: "☀️ Soleado - Excelente",
-                2: "⛅ Parcialmente nublado - Bueno",
-                3: "☁️ Nublado - Normal",
-                4: "🌧️ Lluvia ligera - Malo",
-                5: "⛈️ Lluvia fuerte/Tormenta - Muy malo"
-            }[x]
-        )
+        temperatura, humedad, sensacion_termica, codigo_clima = render_weather_controls()
 
         st.markdown("---")
         
@@ -499,18 +569,20 @@ def main():
                     
                     with info_cols[1]:
                         st.markdown("#### 🌦️ Condiciones")
+                        weather_emoji = {
+                            1: '☀️ Soleado',
+                            2: '⛅ Parcial',
+                            3: '☁️ Nublado',
+                            4: '🌧️ Lluvia',
+                            5: '⛈️ Tormenta'
+                        }.get(codigo_clima, 'N/A')
+                        
                         st.markdown(f"""
                         <div class="info-card">
                             <strong>Temperatura:</strong> {temperatura}°C<br>
                             <strong>Humedad:</strong> {humedad}%<br>
                             <strong>Sensación térmica:</strong> {sensacion_termica}°C<br>
-                            <strong>Condición:</strong> {{
-                                1: '☀️ Soleado',
-                                2: '⛅ Parcial',
-                                3: '☁️ Nublado',
-                                4: '🌧️ Lluvia',
-                                5: '⛈️ Tormenta'
-                            }}.get({codigo_clima}, 'N/A')
+                            <strong>Condición:</strong> {weather_emoji}
                         </div>
                         """, unsafe_allow_html=True)
 
@@ -661,7 +733,7 @@ def main():
     st.markdown("""
     <div class="footer">
         🎢 Parklytics — Predicción de tiempos de espera en tiempo real<br>
-        <small>Desarrollado con ❤️ por Sergio López | v2.0</small>
+        <small>Desarrollado con ❤️ por Sergio López | v2.1</small>
     </div>
     """, unsafe_allow_html=True)
 
