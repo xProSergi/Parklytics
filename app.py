@@ -120,23 +120,44 @@ def render_hero():
                     overflow: hidden;
                 }}
                 
+                .hero-title {{
+                    font-size: 4.5rem;
+                    font-weight: 800;
+                    margin: 0;
+                    color: #FF8C00 !important;  /* Naranja intenso */
+                    text-shadow: 0 4px 12px rgba(0,0,0,0.9);
+                    line-height: 1.1;
+                }}
+                
+                .hero-subtitle {{
+                    font-size: 3rem;
+                    margin: 2rem 0 0;
+                    color: #FFD54F !important;  /* Amarillo dorado */
+                    font-weight: 700;
+                    text-shadow: 0 4px 18px rgba(0,0,0,0.85);
+                    line-height: 1.4;
+                    letter-spacing: 0.5px;
+                }}
+                
                 @media (max-width: 768px) {{
                     .hero-container {{
                         height: 400px;
                     }}
                     .hero-title {{
                         font-size: 3rem;
+                        color: #FF8C00 !important;
                     }}
                     .hero-subtitle {{
                         font-size: 1.8rem;
                         margin-top: 1rem;
+                        color: #FFD54F !important;
                     }}
                 }}
             </style>
             
             <div class="hero-container">
                 <div class="hero-content">
-                    <h1 class="hero-title">Parklytics</h1>
+                    <h1 class="hero-title">ParkBeat</h1>
                     <p class="hero-subtitle">Predicción inteligente de tiempos de espera en Parque Warner</p>
                 </div>
             </div>
@@ -146,10 +167,10 @@ def render_hero():
             # fallback si no hay imagen
             st.markdown("""
             <div style="text-align: center; padding: 2rem 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                <h1 style="color: #FF8C00; margin: 0; font-size: 3rem; text-shadow: 0 4px 12px rgba(0,0,0,0.9);">
-                    Parklytics
+                <h1 style="color: #FF8C00 !important; margin: 0; font-size: 3rem; text-shadow: 0 4px 12px rgba(0,0,0,0.9);">
+                    ParkBeat
                 </h1>
-                <p style="color: #FFD54F; margin: 1rem 0 0; font-size: 2rem; font-weight: 700; text-shadow: 0 4px 14px rgba(0,0,0,0.85);">
+                <p style="color: #FFD54F !important; margin: 1rem 0 0; font-size: 2rem; font-weight: 700; text-shadow: 0 4px 14px rgba(0,0,0,0.85);">
                     Predicción inteligente de tiempos de espera en Parque Warner
                 </p>
             </div>
@@ -211,9 +232,9 @@ def render_sidebar():
             **Motivación:**
             
             👥 **Optimizar la experiencia** de los visitantes del parque  
-            ⏰ **Reducir el tiempo** perdido en colas interminables  
+            ⏰ **Reducir el tiempo** perdido en colas 
             📈 **Aprovechar datos** históricos para predicciones inteligentes  
-            🚀 **Demostrar el poder** del machine learning aplicado al turismo  
+            🚀 **Demostrar el poder** del machine learning aplicado al ocio
             
             **Tecnologías utilizadas:**
             
@@ -232,10 +253,10 @@ def render_sidebar():
             
             **Fuente de datos:**
             
-            📅 **Histórico** de tiempos de espera reales  
+            📅 **Histórico** de tiempos de espera reales  (Ingesta de datos mediante API Queue-Times)
             🌤️ **Datos meteorológicos** en tiempo real  
             🎢 **Información** específica de cada atracción  
-            📍 **Datos geográficos** por zonas del parque  
+          
             
             **Procesamiento:**
             
@@ -254,7 +275,7 @@ def render_sidebar():
         st.markdown("### 📧 Contacto")
         st.markdown("""
         **Desarrollador:** Sergio López  
-        **Versión:** 2.0  
+        **Versión:** 1.0  
         **Estado:** En producción  
         
         [📁 Repositorio](#) | [📄 Documentación](#)
