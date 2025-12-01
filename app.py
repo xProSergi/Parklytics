@@ -32,7 +32,6 @@ st.markdown("""
         margin: 0 !important;
         padding: 0 !important;
         max-width: 100% !important;
-        overflow-x: hidden !important;
     }
     
     /* Main content container */
@@ -44,20 +43,14 @@ st.markdown("""
     /* Hero Section */
     .hero-container {
         position: relative;
-        width: 100vw;
-        height: 100vh;
-        min-height: 600px;
+        width: 100%;
+        height: 400px;
         overflow: hidden;
         margin: 0;
         padding: 0;
-        left: 0;
-        right: 0;
     }
     
     .hero-image {
-        position: absolute;
-        top: 0;
-        left: 0;
         width: 100%;
         height: 100%;
         object-fit: cover;
@@ -70,13 +63,7 @@ st.markdown("""
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(
-            45deg,
-            rgba(9, 0, 24, 0.9) 0%,
-            rgba(0, 0, 0, 0.7) 30%,
-            rgba(255, 87, 34, 0.4) 70%,
-            rgba(0, 0, 0, 0.9) 100%
-        );
+        background: rgba(0, 0, 0, 0.4);
     }
     
     .hero-content {
@@ -87,85 +74,22 @@ st.markdown("""
         text-align: center;
         width: 100%;
         padding: 0 1rem;
-        z-index: 2;
     }
     
-    @import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Orbitron:wght@400;700&display=swap');
-    
     .hero-title {
-        font-family: 'Orbitron', sans-serif;
-        font-size: 6rem;
+        font-size: 3.5rem;
         font-weight: 700;
         margin: 0;
         color: #ffffff;
-        text-shadow: 
-            0 0 10px rgba(255, 215, 0, 0.8),
-            0 0 20px rgba(255, 87, 34, 0.6);
-        letter-spacing: 4px;
-        text-transform: uppercase;
-        margin-bottom: 1rem;
-        position: relative;
-        display: inline-block;
-    }
-    
-    .hero-title::after {
-        content: '';
-        position: absolute;
-        width: 100%;
-        height: 4px;
-        background: linear-gradient(90deg, transparent, #FFD700, transparent);
-        bottom: -10px;
-        left: 0;
-        border-radius: 2px;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
     }
     
     .hero-subtitle {
-        font-family: 'Audiowide', monospace;
-        font-size: 1.8rem;
-        margin: 1.5rem 0 0;
-        color: rgba(255, 255, 255, 0.9);
-        font-weight: 300;
-        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
-        letter-spacing: 3px;
-        text-transform: uppercase;
-        animation: fadeIn 2s ease-in-out;
-    }
-    
-    .hero-scroll-indicator {
-        position: absolute;
-        bottom: 40px;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        gap: 12px;
-        animation: bounce 2s infinite;
-    }
-    
-    .scroll-dot {
-        width: 10px;
-        height: 10px;
-        background: rgba(255, 255, 255, 0.7);
-        border-radius: 50%;
-        animation: pulse 1.5s infinite;
-    }
-    
-    .scroll-dot:nth-child(2) { animation-delay: 0.2s; }
-    .scroll-dot:nth-child(3) { animation-delay: 0.4s; }
-    
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    @keyframes bounce {
-        0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
-        40% { transform: translateY(-20px) translateX(-50%); }
-        60% { transform: translateY(-10px) translateX(-50%); }
-    }
-    
-    @keyframes pulse {
-        0%, 100% { transform: scale(1); opacity: 0.7; }
-        50% { transform: scale(1.3); opacity: 1; }
+        font-size: 1.5rem;
+        margin: 1rem 0 0;
+        color: #ffffff;
+        font-weight: 400;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
     }
     
     /* Card Styles */
@@ -207,7 +131,6 @@ def render_hero():
     try:
         hero_image_path = os.path.join("img", "fotoBatman.jpg")
         hero_image = get_base64_image(hero_image_path)
-        
         st.markdown(f"""
         <div class="hero-container">
             <img src="data:image/jpg;base64,{hero_image}" class="hero-image" alt="Parque Warner Madrid">
@@ -215,11 +138,6 @@ def render_hero():
             <div class="hero-content">
                 <h1 class="hero-title">ParkBeat</h1>
                 <p class="hero-subtitle">Predicción de tiempos de espera en tiempo real</p>
-                <div class="hero-scroll-indicator">
-                    <span class="scroll-dot"></span>
-                    <span class="scroll-dot"></span>
-                    <span class="scroll-dot"></span>
-                </div>
             </div>
         </div>
         """, unsafe_allow_html=True)
