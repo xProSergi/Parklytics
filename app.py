@@ -27,19 +27,37 @@ st.set_page_config(
 # Custom CSS
 st.markdown("""
 <style>
-    /* Base Styles */
+    /* Global Overrides */
+    html, body, #root, .stApp {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+    }
+    
+    /* Main content container */
+    .main .block-container {
+        padding: 0 !important;
+        max-width: 100% !important;
+    }
+    
+    /* Hero Section */
     .hero-container {
         position: relative;
-        width: 100%;
-        height: 500px;
+        width: 100vw;
+        height: 100vh;
+        min-height: 600px;
         overflow: hidden;
-        margin: -1rem 0 2rem 0;
+        margin: 0;
         padding: 0;
-        max-width: 100%;
-        border-radius: 0;
+        left: 0;
+        right: 0;
     }
     
     .hero-image {
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
         object-fit: cover;
@@ -53,11 +71,11 @@ st.markdown("""
         width: 100%;
         height: 100%;
         background: linear-gradient(
-            to bottom,
-            rgba(0, 0, 0, 0.2) 0%,
-            rgba(255, 69, 0, 0.2) 30%,
-            rgba(255, 165, 0, 0.15) 60%,
-            rgba(0, 0, 0, 0.6) 100%
+            45deg,
+            rgba(9, 0, 24, 0.9) 0%,
+            rgba(0, 0, 0, 0.7) 30%,
+            rgba(255, 87, 34, 0.4) 70%,
+            rgba(0, 0, 0, 0.9) 100%
         );
     }
     
@@ -67,25 +85,87 @@ st.markdown("""
         left: 50%;
         transform: translate(-50%, -50%);
         text-align: center;
-        color: white;
         width: 100%;
         padding: 0 1rem;
+        z-index: 2;
     }
     
+    @import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Orbitron:wght@400;700&display=swap');
+    
     .hero-title {
-        font-size: 4rem;
-        font-weight: 800;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 6rem;
+        font-weight: 700;
         margin: 0;
-        color: #FF8C00;
-        text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        color: #ffffff;
+        text-shadow: 
+            0 0 10px rgba(255, 215, 0, 0.8),
+            0 0 20px rgba(255, 87, 34, 0.6);
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+        position: relative;
+        display: inline-block;
+    }
+    
+    .hero-title::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, transparent, #FFD700, transparent);
+        bottom: -10px;
+        left: 0;
+        border-radius: 2px;
     }
     
     .hero-subtitle {
-        font-size: 2rem;
-        margin: 1rem 0 0;
-        color: #FFD54F;
-        font-weight: 700;
-        text-shadow: 0 4px 18px rgba(0,0,0,0.85);
+        font-family: 'Audiowide', monospace;
+        font-size: 1.8rem;
+        margin: 1.5rem 0 0;
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 300;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        animation: fadeIn 2s ease-in-out;
+    }
+    
+    .hero-scroll-indicator {
+        position: absolute;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 12px;
+        animation: bounce 2s infinite;
+    }
+    
+    .scroll-dot {
+        width: 10px;
+        height: 10px;
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: 50%;
+        animation: pulse 1.5s infinite;
+    }
+    
+    .scroll-dot:nth-child(2) { animation-delay: 0.2s; }
+    .scroll-dot:nth-child(3) { animation-delay: 0.4s; }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+        40% { transform: translateY(-20px) translateX(-50%); }
+        60% { transform: translateY(-10px) translateX(-50%); }
+    }
+    
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.7; }
+        50% { transform: scale(1.3); opacity: 1; }
     }
     
     /* Card Styles */
@@ -127,93 +207,31 @@ def render_hero():
     try:
         hero_image_path = os.path.join("img", "fotoBatman.jpg")
         hero_image = get_base64_image(hero_image_path)
-
+        
         st.markdown(f"""
-        <style>
-            /* Contenedor del hero */
-            .hero-container {{
-                position: relative;
-                width: 100vw;
-                height: 80vh;
-                overflow: hidden;
-                margin: 0;
-                padding: 0;
-            }}
-
-            /* Imagen de fondo */
-            .hero-image {{
-                width: 100%;
-                height: 100%;
-                object-fit: cover; /* ocupa todo el contenedor sin deformarse */
-                display: block;
-            }}
-
-            /* Overlay oscuro para contraste */
-            .hero-overlay {{
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4));
-            }}
-
-            /* Contenido del hero */
-            .hero-content {{
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                text-align: center;
-                color: #fff;
-                z-index: 2;
-                padding: 0 1rem;
-            }}
-
-            .hero-title {{
-                font-family: 'Poppins', sans-serif;
-                font-size: 4rem;
-                font-weight: 800;
-                margin: 0;
-                letter-spacing: 2px;
-                text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
-            }}
-
-            .hero-subtitle {{
-                font-family: 'Poppins', sans-serif;
-                font-size: 1.5rem;
-                margin-top: 1rem;
-                font-weight: 500;
-                text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
-            }}
-
-            /* Responsivo */
-            @media (max-width: 768px) {{
-                .hero-title {{ font-size: 3rem; }}
-                .hero-subtitle {{ font-size: 1.2rem; }}
-            }}
-        </style>
-
         <div class="hero-container">
-            <img src="data:image/jpg;base64,{hero_image}" class="hero-image" alt="Parque">
+            <img src="data:image/jpg;base64,{hero_image}" class="hero-image" alt="Parque Warner Madrid">
             <div class="hero-overlay"></div>
             <div class="hero-content">
                 <h1 class="hero-title">ParkBeat</h1>
                 <p class="hero-subtitle">Predicción de tiempos de espera en tiempo real</p>
+                <div class="hero-scroll-indicator">
+                    <span class="scroll-dot"></span>
+                    <span class="scroll-dot"></span>
+                    <span class="scroll-dot"></span>
+                </div>
             </div>
         </div>
         """, unsafe_allow_html=True)
-
     except Exception as e:
-        st.markdown(f"""
-        <div style="text-align:center; padding:3rem 0; background:#1a1a1a; color:#fff; margin:0;">
-            <h1 style="font-family:'Poppins',sans-serif; font-size:3rem; font-weight:800; margin:0;">ParkBeat</h1>
-            <p style="font-family:'Poppins',sans-serif; font-size:1.5rem; font-weight:500; margin-top:1rem;">
+        st.markdown("""
+        <div style="text-align: center; padding: 3rem 0; background: #f8f9fa; border-radius: 12px; margin-bottom: 2rem;">
+            <h1 style="color: #2b6ef6; margin: 0; font-size: 3rem; font-weight: 800;">ParkBeat</h1>
+            <p style="color: #4a5568; margin: 0.5rem 0 0; font-size: 1.5rem; font-weight: 500;">
                 Predicción de tiempos de espera en tiempo real
             </p>
         </div>
         """, unsafe_allow_html=True)
-
 
 def main():
     # Hero Section
@@ -221,7 +239,7 @@ def main():
     
     # Welcome Section
     st.markdown("""
-    ##  Bienvenido a ParkBeat
+    ## 🎢 Bienvenido a ParkBeat
     
     Predice los tiempos de espera en las atracciones del Parque Warner Madrid con precisión. 
     Simplemente selecciona una atracción, la fecha y la hora de tu visita, y te mostraremos una 
@@ -263,7 +281,7 @@ def main():
     zonas = get_zones()
 
     # Main Controls Section
-    st.markdown("##  Configura tu predicción")
+    st.markdown("## ⚙️ Configura tu predicción")
     
     # Create columns for better organization
     col1, col2 = st.columns(2)
