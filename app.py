@@ -267,7 +267,7 @@ def render_hero():
                     text-shadow: 0 2px 4px rgba(0,0,0,0.5);
                 }}
                 .hero-subtitle {{
-                    font-size: 1.5rem;
+                    font-size: 2rem;
                     margin: 1rem 0 0;
                     color: #FFD700;  /* Dorado para el subtítulo */
                     font-weight: 500;
@@ -281,7 +281,7 @@ def render_hero():
                         font-size: 2.5rem;
                     }}
                     .hero-subtitle {{
-                        font-size: 1.5rem;
+                        font-size: 2rem;
                     }}
                 }}
             </style>
