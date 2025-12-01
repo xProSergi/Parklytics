@@ -40,6 +40,65 @@ st.markdown("""
         max-width: 100% !important;
     }
     
+    /* Dark mode variables */
+    :root {
+        --primary: #2b6ef6;
+        --text: #1e293b;
+        --bg: #ffffff;
+        --card-bg: #ffffff;
+        --border: #e2e8f0;
+        --shadow: rgba(0, 0, 0, 0.1);
+        --sidebar-bg: #f8f9fa;
+    }
+    
+    /* Dark theme overrides */
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --text: #e2e8f0;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --border: #334155;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --sidebar-bg: #1e293b;
+        }
+        
+        /* Fix text color in dark mode */
+        .stMarkdown, .stMarkdown p, .stMarkdown li, .stMarkdown strong,
+        .stAlert, .stAlert p, .stAlert strong,
+        .stExpander .streamlit-expanderHeader,
+        .stExpander .streamlit-expanderContent,
+        .stExpander .streamlit-expanderContent p,
+        .stExpander .streamlit-expanderContent li,
+        .stSelectbox label, .stSlider label, .stDateInput label, .stTimeInput label,
+        .stButton>button {
+            color: var(--text) !important;
+        }
+        
+        /* Fix sidebar text color */
+        .sidebar .sidebar-content,
+        .sidebar .sidebar-content * {
+            color: var(--text) !important;
+        }
+        
+        /* Fix expander headers */
+        .stExpander .streamlit-expanderHeader {
+            background-color: var(--card-bg) !important;
+        }
+        
+        /* Fix cards and containers */
+        .stAlert, .stExpander, .stMarkdown > div {
+            background-color: var(--card-bg) !important;
+            border-color: var(--border) !important;
+        }
+        
+        /* Fix input fields */
+        .stTextInput input, .stSelectbox select, .stSlider .stSlider {
+            background-color: var(--bg) !important;
+            color: var(--text) !important;
+            border-color: var(--border) !important;
+        }
+    }
+    
     /* Hero Section */
     .hero-container {
         position: relative;
@@ -264,18 +323,53 @@ def render_sidebar():
     st.sidebar.markdown("""
     <style>
         .sidebar .sidebar-content {
-            background-color: #f8f9fa;
+            background-color: var(--sidebar-bg) !important;
+            color: var(--text) !important;
         }
+        
         .stExpander {
-            background-color: white;
-            border-radius: 8px;
-            padding: 0.5rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            background-color: var(--card-bg) !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 8px !important;
+            padding: 0.5rem !important;
+            margin-bottom: 1rem !important;
+            box-shadow: 0 1px 3px var(--shadow) !important;
         }
+        
         .stExpander .streamlit-expanderHeader {
-            font-weight: 600;
-            color: #2c3e50;
+            font-weight: 600 !important;
+            color: var(--text) !important;
+            background-color: transparent !important;
+        }
+        
+        .stExpander .streamlit-expanderContent {
+            color: var(--text) !important;
+            background-color: transparent !important;
+        }
+        
+        /* Fix for weather expander */
+        [data-testid="stExpander"] {
+            background-color: var(--card-bg) !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 8px !important;
+            margin-bottom: 1rem !important;
+        }
+        
+        [data-testid="stExpander"] > div {
+            background-color: transparent !important;
+        }
+        
+        [data-testid="stExpander"] .stMarkdown p {
+            color: var(--text) !important;
+        }
+        
+        /* Fix for recommendation cards */
+        .stMarkdown > div {
+            background-color: var(--card-bg) !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 8px !important;
+            padding: 1rem !important;
+            margin-bottom: 1rem !important;
         }
     </style>
     """, unsafe_allow_html=True)
@@ -515,7 +609,52 @@ def main():
                 </div>
                 """, unsafe_allow_html=True)
 
-                # Add tabs for detailed information
+                # Add tabs for detailed information with custom styling
+                st.markdown("""
+                <style>
+                    /* Style for tabs */
+                    .stTabs [data-baseweb="tab-list"] {
+                        gap: 8px;
+                        margin-bottom: 1.5rem;
+                    }
+                    
+                    .stTabs [data-baseweb="tab"] {
+                        background-color: var(--card-bg) !important;
+                        color: var(--text) !important;
+                        border: 1px solid var(--border) !important;
+                        border-radius: 8px !important;
+                        padding: 0.5rem 1rem !important;
+                        margin-right: 0 !important;
+                        transition: all 0.2s ease;
+                    }
+                    
+                    .stTabs [data-baseweb="tab"]:hover {
+                        background-color: var(--primary) !important;
+                        color: white !important;
+                    }
+                    
+                    .stTabs [aria-selected="true"] {
+                        background-color: var(--primary) !important;
+                        color: white !important;
+                        font-weight: 600;
+                    }
+                    
+                    /* Style for tab content */
+                    [data-testid="stTabs"] > div > div:last-child > div {
+                        background-color: transparent !important;
+                        padding: 0 !important;
+                    }
+                    
+                    /* Fix for recommendation cards in dark mode */
+                    [data-testid="stExpander"] .stMarkdown > div {
+                        background-color: transparent !important;
+                        border: none !important;
+                        padding: 0 !important;
+                        margin: 0 !important;
+                    }
+                </style>
+                """, unsafe_allow_html=True)
+                
                 tab1, tab2, tab3 = st.tabs(["📝 Información", "🔍 Contexto", "💡 Recomendaciones"])
 
                 with tab1:
