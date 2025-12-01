@@ -264,13 +264,11 @@ def render_hero():
 
                 .hero-title {{
                     font-size: 4.5rem;
-                    font-weight: 900;
+                    font-weight: 800;
                     margin: 0;
-                    color: #FF8C00;
-                    text-shadow: 0 4px 16px rgba(0,0,0,0.9);
+                    color: #FF8C00;  /* Changed to darker orange for better visibility */
+                    text-shadow: 0 2px 6px rgba(0,0,0,0.7);
                     line-height: 1.1;
-                    display: inline-block;
-                    position: relative;
                 }}
 
                 .hero-subtitle {{
