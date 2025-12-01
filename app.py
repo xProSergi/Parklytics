@@ -202,7 +202,7 @@ def render_sidebar():
         
         menu_option = st.radio(
             "",
-            [" Inicio", " ¿Qué es ParkBeat?", " ¿Por qué este proyecto?", " Acerca de los datos"],
+            ["Inicio", " ¿Qué es ParkBeat?", " ¿Por qué este proyecto?", " Acerca de los datos"],
             label_visibility="collapsed"
         )
         
@@ -231,10 +231,9 @@ def render_sidebar():
             
             **Motivación:**
             
-             **Optimizar la experiencia** de los visitantes del parque  
-             **Reducir el tiempo** perdido en colas 
-             **Aprovechar datos** históricos para predicciones inteligentes  
-             **Demostrar el poder** del machine learning aplicado al ocio
+Soy un apasionado de los parques temáticos desde que tengo memoria, y mejorar la experiencia del visitante, especialmente en aspectos como los tiempos de espera, es lo que realmente me inspira.
+Desde 2007 (primera vez que visité el parque), Parque Warner ha sido una parte fundamental de mi vida. Podría decirse que he crecido junto a él, y con el tiempo, mi amor por el parque se ha fusionado con mi pasión por el análisis de datos, lo que ha dado lugar a la creación de ParkBeat.      
+      
             
             **Tecnologías utilizadas:**
             
