@@ -721,7 +721,7 @@ def main():
     st.markdown("---")
     st.markdown("""
     <div style="text-align: center; color: var(--text-color); opacity: 0.7; padding: 1.5rem 0;">
-        🎢 ParkBeat — Predicción de tiempos de espera en tiempo real<br>
+        🎢 ParkBeat — Predicción de tiempos de espera en Parque Warner<br>
         <small>Desarrollado con ❤️ por Sergio López | v1.0</small>
     </div>
     """, unsafe_allow_html=True)
