@@ -171,7 +171,7 @@ Aquí se puede ver unas capturas de pantalla de la interfaz sobre un caso de uso
   Predicción horaria, UI completa, modo oscuro, gráficas y métricas  
 
 -  **Fase 2 — Consolidación**  
-  API propia, modelos más precisos, alertas inteligentes  
+  API propia, mayor cantidad de datos, alertas inteligentes  
 
 -  **Fase 3 — Expansión**  
   Multi-parque, dashboard para operadores, IA generativa para planificación  
