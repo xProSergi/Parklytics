@@ -177,7 +177,11 @@ Aquí se puede ver unas capturas de pantalla de la interfaz sobre un caso de uso
   Multi-parque, dashboard para operadores, IA generativa para planificación  
 
 ---
+## Licencia
 
+Este proyecto ha sido desarrollado por Sergio López. Proyecto no afiliado a Parque Warner.
+
+---
 ## Contacto
 
 - LinkedIn: [Sergio López](https://linkedin.com/in/sergio-lopez-dev)
