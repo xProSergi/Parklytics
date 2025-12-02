@@ -12,7 +12,7 @@ ParkBeat es una plataforma inteligente diseñada para transformar la manera en q
 - [Descripción general](#-descripción-general)  
 - [Características principales](#-características-principales)  
 - [Tecnologías utilizadas](#️-tecnologías-utilizadas)   
-- [Capturas de pantalla](#️capturas de pantalla)  
+- [Capturas de pantalla](#capturas-de-pantalla)  
 - [Funcionamiento de la predicción](#-funcionamiento-de-la-predicción)  
 - [Interfaz y experiencia de usuario](#-interfaz-y-experiencia-de-usuario)  
 - [Casos de uso](#-casos-de-uso)  
